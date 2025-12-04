@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Guide - Saree Availability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        .method {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .method h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .method ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .method li {
+            margin-bottom: 10px;
+        }
+        .method a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .method a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Go Live - Deployment Guide</h1>
+        <p class="subtitle">Get your Saree Availability website online in minutes!</p>
+
+        <div class="highlight">
+            <strong>✨ Recommended:</strong> Use the <strong>HTML version</strong> for easiest deployment. No server or database needed!
+        </div>
+
+        <div class="method">
+            <h2>Method 1: Netlify (Easiest - 2 Minutes) ⚡</h2>
+            <ol>
+                <li>Go to <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop</a></li>
+                <li>Drag and drop your entire project folder</li>
+                <li>Wait 30 seconds for deployment</li>
+                <li><strong>Done!</strong> You'll get a live URL instantly</li>
+            </ol>
+            <a href="https://app.netlify.com/drop" target="_blank" class="btn">Deploy to Netlify Now →</a>
+        </div>
+
+        <div class="method">
+            <h2>Method 2: GitHub Pages (Free Forever) 🆓</h2>
+            <ol>
+                <li>Create account at <a href="https://github.com" target="_blank">GitHub</a></li>
+                <li>Create new repository (make it <strong>Public</strong>)</li>
+                <li>Upload your files using Git or web interface</li>
+                <li>Go to Settings → Pages → Enable GitHub Pages</li>
+                <li>Your site: <code>https://YOUR_USERNAME.github.io/saree-availability/</code></li>
+            </ol>
+            <a href="https://github.com/new" target="_blank" class="btn">Create GitHub Repository →</a>
+        </div>
+
+        <div class="method">
+            <h2>Method 3: Vercel (Fast & Free) ⚡</h2>
+            <ol>
+                <li>Sign up at <a href="https://vercel.com" target="_blank">Vercel</a></li>
+                <li>Click "Add New Project"</li>
+                <li>Upload your folder</li>
+                <li>Deploy instantly!</li>
+            </ol>
+            <a href="https://vercel.com" target="_blank" class="btn">Deploy to Vercel →</a>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Make sure you're deploying the <strong>HTML version</strong> files:
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>index.html</li>
+                <li>products.html</li>
+                <li>admin.html</li>
+                <li>css/style.css</li>
+                <li>js/data.js</li>
+                <li>js/main.js</li>
+            </ul>
+        </div>
+
+        <div class="method">
+            <h2>After Deployment ✅</h2>
+            <ol>
+                <li>Test your live website</li>
+                <li>Update WhatsApp number (see instructions below)</li>
+                <li>Add products via admin panel</li>
+                <li>Share your URL with customers!</li>
+            </ol>
+        </div>
+
+        <div class="method">
+            <h2>Update WhatsApp Number 📱</h2>
+            <p>After your site is live:</p>
+            <ol>
+                <li>Open your live website</li>
+                <li>Press <strong>F12</strong> (open browser console)</li>
+                <li>Paste this code:</li>
+            </ol>
+            <div class="code">
+localStorage.setItem('whatsapp_config', JSON.stringify({
+    number: '911234567890',  // Your WhatsApp number
+    message: 'Hello! I need help with saree availability.'
+}));
+            </div>
+            <p>Press Enter, then refresh the page.</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #eee;">
+            <p style="color: #666;">Need help? Check the <code>QUICK_DEPLOY.md</code> file for detailed instructions.</p>
+            <a href="index.html" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Website</a>
+        </div>
+    </div>
+</body>
+</html>
+

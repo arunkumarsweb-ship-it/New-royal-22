@@ -1,0 +1,78 @@
+<?php require_once 'config/whatsapp.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saree Availability - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Saree Availability System</h1>
+            <nav class="main-nav">
+                <ul id="category-menu">
+                    <li>Loading categories...</li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="welcome-section">
+            <h2>Welcome to Saree Availability System</h2>
+            <p>Select a category from the menu above to view available sarees.</p>
+            <p>Each category contains 30 days of products (Day 1 to Day 30).</p>
+        </div>
+
+        <div class="admin-link">
+            <a href="admin.php">Admin Panel</a>
+        </div>
+    </main>
+
+    <!-- WhatsApp Customer Care Button -->
+    <a href="https://wa.me/<?php echo WHATSAPP_NUMBER; ?>?text=<?php echo urlencode(WHATSAPP_MESSAGE); ?>" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       title="Contact Customer Care on WhatsApp">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 0C7.164 0 0 7.164 0 16c0 2.825.74 5.47 2.035 7.77L0 32l8.5-2.1C10.8 31.4 13.3 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0z" fill="#25D366"/>
+            <path d="M24.5 20.1c-.3.8-1.5 1.5-2.1 1.6-.6.1-1.4.5-4.1-.5-3.3-1.2-5.4-5.9-5.6-6.1-.2-.3-1.6-2.1-1.6-4s1-2.8 1.4-3.4c.4-.5.8-.6 1.1-.6h1.3c.3 0 .7.1.9.5.2.4.7 1.4.8 1.7.1.3.1.5 0 .8-.1.3-.2.5-.4.7-.2.2-.4.4-.6.6-.2.2-.4.4-.2.7.2.3.4.6.8 1 .4.4.7.7 1 .9.4.3.6.5.9.4.3-.1 1.3-.5 1.6-1 .3-.5.3-1 .2-1.2-.1-.2-.4-.3-.8-.5-.4-.2-2.4-1.2-2.8-1.3-.4-.1-.7-.2-1 .2-.3.4-1.2 1.3-1.5 1.6-.3.3-.6.4-1 .1-.4-.3-1.7-.6-3.2-1.9-1.2-1-2-2.2-2.8-3.1-.3-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2.1-.4 0-.6-.1-.2-.4-.6-.6-.8-.2-.2-.4-.3-.6-.3-.2 0-.4 0-.6.1-.2.1-.4.2-.6.3-.2.1-.4.3-.5.5-.2.3-.4.6-.6 1-.2.4-.4.8-.6 1.2-.2.4-.1.8.1 1.2.4.8 1.8 3.3 3.9 4.5 2.1 1.2 3.9 1.5 4.7 1.7.8.2 1.6.2 2.2.1.6-.1 1.3-.3 1.8-.6.5-.3 1-.7 1.4-1.1.2-.2.4-.4.6-.6.2-.2.4-.2.6-.1.2.1.4.3.6.5.2.2.4.4.6.6.2.2.4.4.5.6.1.2.1.4.1.6 0 .2-.1.4-.2.6z" fill="#FFF"/>
+        </svg>
+        <span>Customer Care</span>
+    </a>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Load categories on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+        });
+
+        function loadCategories() {
+            fetch('api/get_categories.php')
+                .then(response => response.json())
+                .then(categories => {
+                    const menu = document.getElementById('category-menu');
+                    menu.innerHTML = '';
+                    
+                    categories.forEach(category => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = `products.php?category_id=${category.id}`;
+                        a.textContent = category.name;
+                        li.appendChild(a);
+                        menu.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading categories:', error);
+                    document.getElementById('category-menu').innerHTML = '<li>Error loading categories</li>';
+                });
+        }
+    </script>
+</body>
+</html>
+

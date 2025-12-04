@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Gallery - Saree Availability</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html">Saree Availability Gallery</a></h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top:5px;">Shareable view of available sarees</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> >
+            <span id="category-name">Category</span> >
+            <span id="day-name">Day</span>
+        </div>
+
+        <div class="filter-section" style="gap:10px; align-items:flex-start;">
+            <div>
+                <strong>Share this gallery:</strong>
+                <div style="margin-top:10px;">
+                    <button id="copy-link" class="btn-secondary">Copy Link</button>
+                    <button id="share-link" class="btn-primary">Share</button>
+                </div>
+                <p id="share-feedback" style="margin-top:10px; color:#667eea;"></p>
+            </div>
+            <div>
+                <strong>Note:</strong>
+                <p style="max-width:400px;">This gallery shows only the sarees marked as <em>Available</em> for the selected category and day.</p>
+            </div>
+        </div>
+
+        <div id="share-products" class="products-grid">
+            <p class="info-message">Preparing gallery...</p>
+        </div>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let categoryId = null;
+        let subcategoryId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            categoryId = parseInt(urlParams.get('category_id'));
+            subcategoryId = parseInt(urlParams.get('subcategory_id'));
+
+            if (!categoryId || !subcategoryId) {
+                document.getElementById('share-products').innerHTML = '<p class="error">Invalid share link. Please select a category and day from the products page.</p>';
+                return;
+            }
+
+            renderGallery();
+
+            document.getElementById('copy-link').addEventListener('click', copyShareLink);
+            document.getElementById('share-link').addEventListener('click', shareLink);
+        });
+
+        function renderGallery() {
+            const categories = getCategories();
+            const category = categories.find(c => c.id == categoryId);
+            if (category) {
+                document.getElementById('category-name').textContent = category.name;
+            }
+
+            const subcategories = getSubcategories(categoryId);
+            const currentSub = subcategories.find(s => s.id == subcategoryId);
+            if (currentSub) {
+                document.getElementById('day-name').textContent = 'Day ' + currentSub.day_number;
+            }
+
+            const container = document.getElementById('share-products');
+            container.innerHTML = '<p class="loading">Loading available products...</p>';
+
+            setTimeout(() => {
+                const products = getProducts(subcategoryId).filter(p => p.availability_status === 'available');
+
+                if (products.length === 0) {
+                    container.innerHTML = '<p class="info-message">No available products to share for this day.</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <div class="product-image">
+                            <img src="${product.image_path}" alt="Product ${product.product_number}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 font-family=%22sans-serif%22 font-size=%2214%22 dy=%2210.5%22 font-weight=%22bold%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                        </div>
+                        <div class="product-number">#${product.product_number}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            }, 100);
+        }
+
+        function getShareUrl() {
+            return window.location.href.split('#')[0];
+        }
+
+        function copyShareLink() {
+            const link = getShareUrl();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(link)
+                    .then(() => showShareFeedback('Link copied to clipboard!'))
+                    .catch(() => fallbackCopy(link));
+            } else {
+                fallbackCopy(link);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showShareFeedback('Link copied to clipboard!');
+            } catch (err) {
+                alert('Copy this link to share:\n' + text);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function shareLink() {
+            const link = getShareUrl();
+            const categoryName = document.getElementById('category-name').textContent;
+            const dayName = document.getElementById('day-name').textContent;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Saree Availability',
+                    text: `Available sarees for ${categoryName} - ${dayName}`,
+                    url: link
+                }).catch(err => {
+                    console.warn('Share failed:', err);
+                });
+            } else {
+                copyShareLink();
+            }
+        }
+
+        function showShareFeedback(message) {
+            const feedback = document.getElementById('share-feedback');
+            feedback.textContent = message;
+            setTimeout(() => {
+                feedback.textContent = '';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+
